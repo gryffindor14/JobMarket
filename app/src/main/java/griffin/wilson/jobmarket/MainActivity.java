@@ -1,15 +1,53 @@
 package griffin.wilson.jobmarket;
 
+import android.databinding.ObservableArrayList;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
+
+import com.malinskiy.superrecyclerview.SuperRecyclerView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import griffin.wilson.jobmarket.data.GithubJobsService;
+import griffin.wilson.jobmarket.data.Job;
+import griffin.wilson.jobmarket.data.JobMarket;
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
+    @Bind(R.id.main)
+    RelativeLayout layout;
+    @Bind(R.id.jobs_list)
+    SuperRecyclerView jobList;
+    private GithubJobsService jobsService;
+    private JobMarket bostonJobMarket =new JobMarket("Boston");
+    private JobMarket nyMarket = new JobMarket("New York");
+    private JobMarket denverMarket = new JobMarket("Denver");
+    private JobMarket boulderMarket = new JobMarket("Boulder");
+    private JobMarket  sfMarket = new JobMarket("San Francisco");
+    private JobMarket chicagoMarket = new JobMarket("Chicago");
+    private JobMarketAdapter adapter;
+
+    private Handler mainHandler = new Handler(Looper.getMainLooper());
+    private JobMarket laMarket = new JobMarket("Lost Angeles");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,35 +56,255 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        ButterKnife.bind(this);
+        JobMarketApp app = (JobMarketApp) getApplicationContext();
+        jobsService = app.getJobsService();
+        adapter = new JobMarketAdapter(this, Arrays.asList(bostonJobMarket,nyMarket,denverMarket,boulderMarket,sfMarket,chicagoMarket));
+        jobList.setLayoutManager(new LinearLayoutManager(this));
+        jobList.setAdapter(adapter);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        reloadData();
+    }
+
+    private void reloadData() {
+        refreshJobMarkets();
+    }
+
+    public void refreshJobMarkets(){
+
+        createBostonObservable("java").mergeWith(createBostonObservable("C++").mergeWith(createBostonObservable("Ruby"))).observeOn(AndroidSchedulers.mainThread()).subscribe();
+        createBoulderObservable("java").mergeWith(createBoulderObservable("C++").mergeWith(createBoulderObservable("Ruby"))).observeOn(AndroidSchedulers.mainThread()).subscribe();
+        createDenverObservable("java").mergeWith(createDenverObservable("C++").mergeWith(createDenverObservable("Ruby"))).observeOn(AndroidSchedulers.mainThread()).subscribe();
+        createSanFranObservable("java").mergeWith(createSanFranObservable("C++").mergeWith(createSanFranObservable("Ruby"))).observeOn(AndroidSchedulers.mainThread()).subscribe();
+        createChicagoObservable("java").mergeWith(createChicagoObservable("C++").mergeWith(createChicagoObservable("Ruby"))).observeOn(AndroidSchedulers.mainThread()).subscribe();
+        createLAObservable("java").mergeWith(createLAObservable("C++").mergeWith(createLAObservable("Ruby"))).observeOn(AndroidSchedulers.mainThread()).subscribe();
+        createNYObservable("java").mergeWith(createNYObservable("C++").mergeWith(createNYObservable("Ruby"))).observeOn(AndroidSchedulers.mainThread()).subscribe();
+
+
+    }
+
+    private void parseChicagoJobs(final List<Job> jobs, final String java) {
+        mainHandler.post(new Runnable() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void run() {
+                chicagoMarket.parse(jobs,java);
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+
             }
         });
+
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    private void parseSanFranJobs(final List<Job> jobs, final String language) {
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                sfMarket.parse(jobs,language);
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
+
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    private void parseDenverJobs(final List<Job> jobs, final String language) {
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                denverMarket.parse(jobs,language);
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
+
+    private void parseNYJobs(final List<Job> jobs, final String lanaguage) {
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                nyMarket.parse(jobs,lanaguage);
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
+
+    }
+
+
+    private void parseBostonJobs(final List<Job> jobs, final String language) {
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                bostonJobMarket.parse(jobs,language);
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
+
+    }
+
+    public Observable<List<Job>> createBostonObservable(final String language){
+        return jobsService.jobsFor(language,"Boston").doOnNext(new Action1<List<Job>>() {
+            @Override
+            public void call(List<Job> jobs) {
+                parseBostonJobs(jobs,language);
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<List<Job>> createSanFranObservable(final String language){
+        return jobsService.jobsFor(language,"San Francisco").doOnNext(new Action1<List<Job>>() {
+            @Override
+            public void call(List<Job> jobs) {
+
+                parseSanFranJobs(jobs,language);
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<List<Job>> createLAObservable(final String language){
+        return jobsService.jobsFor(language,"Los Angeles").doOnNext(new Action1<List<Job>>() {
+            @Override
+            public void call(List<Job> jobs) {
+                parseLAJobs(jobs,language);
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    private void parseLAJobs(final List<Job> jobs, final String language) {
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                laMarket.parse(jobs,language);
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
+
+    }
+
+    public Observable<List<Job>> createDenverObservable(final String language){
+        return jobsService.jobsFor(language,"Denver").doOnNext(new Action1<List<Job>>() {
+            @Override
+            public void call(List<Job> jobs) {
+                parseDenverJobs(jobs,language);
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<List<Job>> createBoulderObservable(final String language){
+        return jobsService.jobsFor(language,"Boulder").doOnNext(new Action1<List<Job>>() {
+            @Override
+            public void call(List<Job> jobs) {
+                parseBoulderJobs(jobs,language);
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+
+    }
+
+    private void parseBoulderJobs(final List<Job> jobs, final String language) {
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                boulderMarket.parse(jobs,language);
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
+
+    }
+
+    public Observable<List<Job>> createChicagoObservable(final String language){
+        return jobsService.jobsFor(language,"Chicago").doOnNext(new Action1<List<Job>>() {
+            @Override
+            public void call(List<Job> jobs) {
+                parseChicagoJobs(jobs,language);
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+
+    }
+    public Observable<List<Job>> createNYObservable(final String language){
+        return jobsService.jobsFor(language,"San Francisco").doOnNext(new Action1<List<Job>>() {
+            @Override
+            public void call(List<Job> jobs) {
+                parseNYJobs(jobs,language);
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+
 }

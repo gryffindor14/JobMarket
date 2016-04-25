@@ -3,38 +3,48 @@ package griffin.wilson.jobmarket.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Created by Griffin on 4/25/2016.
  */
-public class JobMarket implements Parcelable{
+public class JobMarket {
     String location;
-    Map<String, Integer> languagePercentages;
+    Map<String, Integer> languages;
+    private int totalJobs;
 
-    protected JobMarket(Parcel in) {
-        location = in.readString();
+    public void parse(List<Job> jobs, String lanaguage){
+        if(!languages.containsKey(lanaguage)) {
+            languages.put(lanaguage, jobs.size());
+            totalJobs += jobs.size();
+        }
     }
 
-    public static final Creator<JobMarket> CREATOR = new Creator<JobMarket>() {
-        @Override
-        public JobMarket createFromParcel(Parcel in) {
-            return new JobMarket(in);
-        }
 
-        @Override
-        public JobMarket[] newArray(int size) {
-            return new JobMarket[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
+    public JobMarket(String l) {
+        this.location = l;
+        languages = new HashMap<>();
+    }
+    public String getLocation() {
+        return location;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(location);
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+
+    public void addLanguage(String language, int percentage){
+        languages.put(language, percentage);
+    }
+
+    public Map<String, Integer> getLanguages() {
+        return languages;
+    }
+
+    public int getTotalJobs() {
+        return totalJobs;
     }
 }

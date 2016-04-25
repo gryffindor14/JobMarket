@@ -13,6 +13,6 @@ public interface GithubJobsService {
 
     String SERVICE_ENDPOINT = "http://jobs.github.com";
 
-    @GET("/positions")
+    @GET("positions.json")
     Observable<List<Job>> jobsFor(@Query("description") String language, @Query("location") String city);
 }
