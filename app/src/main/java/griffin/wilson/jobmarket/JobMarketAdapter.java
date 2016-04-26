@@ -2,17 +2,13 @@ package griffin.wilson.jobmarket;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
 import griffin.wilson.jobmarket.data.JobMarket;
-import griffin.wilson.jobmarket.data.JobMarketItem;
 
 /**
  * Created by Griffin on 4/25/2016.

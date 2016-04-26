@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by Griffin on 4/25/2016.
  */
-public class Job implements Parcelable {
+public class Job {
 
     public String id;
     public String title;
@@ -28,47 +28,84 @@ public class Job implements Parcelable {
 
     }
 
-    protected Job(Parcel in) {
-        id = in.readString();
-        title = in.readString();
-        location = in.readString();
-        type = in.readString();
-        description = in.readString();
-        howToApply = in.readString();
-        company = in.readString();
-        companyUrl = in.readString();
-        companyLogo = in.readString();
-        url = in.readString();
+
+    public String getId() {
+        return id;
     }
 
-    public static final Creator<Job> CREATOR = new Creator<Job>() {
-        @Override
-        public Job createFromParcel(Parcel in) {
-            return new Job(in);
-        }
-
-        @Override
-        public Job[] newArray(int size) {
-            return new Job[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
-        dest.writeString(title);
-        dest.writeString(location);
-        dest.writeString(type);
-        dest.writeString(description);
-        dest.writeString(howToApply);
-        dest.writeString(company);
-        dest.writeString(companyUrl);
-        dest.writeString(companyLogo);
-        dest.writeString(url);
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getHowToApply() {
+        return howToApply;
+    }
+
+    public void setHowToApply(String howToApply) {
+        this.howToApply = howToApply;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getCompanyUrl() {
+        return companyUrl;
+    }
+
+    public void setCompanyUrl(String companyUrl) {
+        this.companyUrl = companyUrl;
+    }
+
+    public String getCompanyLogo() {
+        return companyLogo;
+    }
+
+    public void setCompanyLogo(String companyLogo) {
+        this.companyLogo = companyLogo;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
