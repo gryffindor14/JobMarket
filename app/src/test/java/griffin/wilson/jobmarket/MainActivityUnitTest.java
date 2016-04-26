@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
 
-import org.apache.tools.ant.Main;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,10 +12,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
-
-import griffin.wilson.jobmarket.data.JobMarket;
 
 import static junit.framework.Assert.assertEquals;
 

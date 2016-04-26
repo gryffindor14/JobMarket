@@ -1,23 +1,15 @@
 package griffin.wilson.jobmarket;
 
-import android.databinding.ObservableArrayList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.RelativeLayout;
 
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,7 +19,6 @@ import griffin.wilson.jobmarket.data.GithubJobsService;
 import griffin.wilson.jobmarket.data.Job;
 import griffin.wilson.jobmarket.data.JobMarket;
 import rx.Observable;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;

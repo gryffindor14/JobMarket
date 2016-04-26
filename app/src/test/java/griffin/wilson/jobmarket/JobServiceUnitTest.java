@@ -4,15 +4,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.List;
 
 import griffin.wilson.jobmarket.data.GithubJobsService;
 import griffin.wilson.jobmarket.data.Job;
-import retrofit2.Retrofit;
-import retrofit2.mock.MockRetrofit;
 import rx.Observable;
 import rx.observers.TestSubscriber;
 

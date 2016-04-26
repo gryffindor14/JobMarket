@@ -2,7 +2,6 @@ package griffin.wilson.jobmarket;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -14,13 +13,11 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import griffin.wilson.jobmarket.data.JobMarket;
 
-import static griffin.wilson.jobmarket.JobMarketAdapter.*;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertSame;
 

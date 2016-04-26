@@ -3,7 +3,6 @@ package griffin.wilson.jobmarket;
 import org.junit.Test;
 import org.junit.internal.runners.JUnit4ClassRunner;
 import org.junit.runner.RunWith;
-import org.mockito.internal.runners.JUnit45AndHigherRunnerImpl;
 
 import java.util.List;
 
@@ -11,7 +10,6 @@ import griffin.wilson.jobmarket.data.Job;
 import griffin.wilson.jobmarket.data.JobMarket;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertSame;
 
 @RunWith(JUnit4ClassRunner.class)
 public class JobMarketTest {

@@ -1,13 +1,10 @@
 package griffin.wilson.jobmarket;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import griffin.wilson.jobmarket.data.GithubJobsService;
 import griffin.wilson.jobmarket.data.Job;
-import retrofit2.Retrofit;
 import retrofit2.http.Query;
 import rx.Observable;
 
