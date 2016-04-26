@@ -17,7 +17,7 @@ import griffin.wilson.jobmarket.data.JobMarketItem;
 /**
  * Created by Griffin on 4/25/2016.
  */
-public class JobMarketAdapter extends RecyclerView.Adapter<JobMarketAdapter.JobMarketViewHolder>{
+public class JobMarketAdapter extends RecyclerView.Adapter<JobMarketViewHolder>{
     private final Context context;
     private List<JobMarket> jobMarkets;
 
@@ -35,7 +35,14 @@ public class JobMarketAdapter extends RecyclerView.Adapter<JobMarketAdapter.JobM
 
     @Override
     public void onBindViewHolder(JobMarketViewHolder holder, int position) {
-        holder.onBindViewHolder(this,position);
+        holder.languageLayout.removeAllViews();
+        JobMarket market = jobMarkets.get(position);
+        holder.title.setText(market.getLocation());
+        for(String l: market.getLanguages().keySet()){
+            TextView t = new TextView(context);
+            t.setText(String.format("In %s, %.2f%% of all current programming is %s",market.getLocation(),market.getTotalJobs()>0?((float)market.getLanguages().get(l)/market.getTotalJobs()*100):0,l));
+            holder.languageLayout.addView(t);
+        }
     }
 
     @Override
@@ -43,27 +50,16 @@ public class JobMarketAdapter extends RecyclerView.Adapter<JobMarketAdapter.JobM
         return jobMarkets.size();
     }
 
-    public class JobMarketViewHolder extends RecyclerView.ViewHolder {
-        public TextView title;
-        public LinearLayout languageLayout;
-        private boolean onBind;
-
-        public JobMarketViewHolder(View itemView) {
-            super(itemView);
-            title = (TextView) itemView.findViewById(R.id.title);
-            languageLayout = (LinearLayout) itemView.findViewById(R.id.language_layout);
-
-        }
-        public void onBindViewHolder(RecyclerView.Adapter adapter, int position){
-            onBind = true;
-            languageLayout.removeAllViews();
-            JobMarket market = jobMarkets.get(position);
-            title.setText(market.getLocation());
-            for(String l: market.getLanguages().keySet()){
-                TextView t = new TextView(context);
-                t.setText(String.format("In %s, %.2f%% of all current programming is %s",market.getLocation(),market.getTotalJobs()>0?((float)market.getLanguages().get(l)/market.getTotalJobs()*100):0,l));
-                languageLayout.addView(t);
-            }
-        }
+    public void setJobMarkets(List<JobMarket> markets) {
+        jobMarkets = markets;
+        notifyDataSetChanged();
     }
+
+    public JobMarket getItemAtPosition(int i) {
+        if(i<jobMarkets.size())
+            return jobMarkets.get(i);
+        else return null;
+    }
+
+
 }

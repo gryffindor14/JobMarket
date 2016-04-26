@@ -1,14 +1,14 @@
 package griffin.wilson.jobmarket.data;
 
+import android.support.annotation.VisibleForTesting;
+
 import java.util.List;
 
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import rx.Observable;
 
-/**
- * Created by Griffin on 4/25/2016.
- */
+@VisibleForTesting
 public interface GithubJobsService {
 
     String SERVICE_ENDPOINT = "http://jobs.github.com";

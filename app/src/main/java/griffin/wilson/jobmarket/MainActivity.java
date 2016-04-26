@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
@@ -303,6 +304,18 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static class MainActivityTest extends MainActivity{
+        private LinearLayoutManager mockLayoutManager;
+        public void setLayoutManager(LinearLayoutManager mockLayoutManager) {
+            this.mockLayoutManager = mockLayoutManager;
+        }
+
+
+        public LinearLayoutManager getLayoutManager() {
+            return mockLayoutManager;
+        }
     }
 
 
